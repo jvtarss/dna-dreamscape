@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap');
 
 @tailwind base;
@@ -6,26 +7,26 @@
 
 @layer base {
   :root {
-    --background: 160 33% 97%;
-    --foreground: 174 40% 21%;
+    --background: 174 45% 27%;
+    --foreground: 0 0% 100%;
 
     --card: 0 0% 100%;
-    --card-foreground: 174 40% 21%;
+    --card-foreground: 174 45% 27%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 174 40% 21%;
+    --popover-foreground: 174 45% 27%;
 
     --primary: 152 100% 42%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 174 40% 21%;
-    --secondary-foreground: 152 100% 42%;
+    --secondary: 0 0% 100%;
+    --secondary-foreground: 174 45% 27%;
 
     --muted: 152 30% 96%;
-    --muted-foreground: 174 15% 45%;
+    --muted-foreground: 0 0% 80%;
 
     --accent: 152 70% 90%;
-    --accent-foreground: 174 40% 21%;
+    --accent-foreground: 174 45% 27%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
@@ -44,7 +45,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-bio-darkGreen text-white font-sans;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -59,11 +60,11 @@
   }
   
   .heading-lg {
-    @apply text-4xl sm:text-5xl font-semibold tracking-tight mb-4;
+    @apply text-4xl sm:text-5xl font-semibold tracking-tight mb-4 text-white;
   }
   
   .heading-md {
-    @apply text-2xl sm:text-3xl font-semibold mb-2;
+    @apply text-2xl sm:text-3xl font-semibold mb-2 text-white;
   }
   
   .subheading {
@@ -79,11 +80,11 @@
   }
   
   .glass-panel {
-    @apply bg-white/70 backdrop-blur-sm border border-bio-green/20 rounded-lg shadow-sm;
+    @apply bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg shadow-sm;
   }
   
   .dna-circle {
-    @apply absolute rounded-full bg-bio-green/10 backdrop-blur-md transition-transform duration-300;
+    @apply absolute rounded-full bg-bio-green/40 backdrop-blur-md transition-transform duration-300;
   }
   
   .link-underline {
