@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -30,10 +29,9 @@ export default {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         bio: {
-          blue: '#4A90E2',
-          teal: '#50E3C2',
-          navy: '#194185',
-          lightBlue: '#B6E3FF',
+          green: '#00D873',
+          darkGreen: '#1F4843',
+          lightGreen: '#E3FFF2',
           gray: '#F7F9FC',
         },
         primary: {
@@ -125,7 +123,7 @@ export default {
         'pulse-subtle': 'pulse-subtle 3s ease-in-out infinite'
       },
       fontFamily: {
-        'sans': ['Inter', 'sans-serif'],
+        'sans': ['Ubuntu', 'sans-serif'],
         'mono': ['Roboto Mono', 'monospace']
       }
     }

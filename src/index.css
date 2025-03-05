@@ -1,5 +1,4 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,33 +6,33 @@
 
 @layer base {
   :root {
-    --background: 210 50% 98%;
-    --foreground: 222 47% 11%;
+    --background: 160 33% 97%;
+    --foreground: 174 40% 21%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 174 40% 21%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 174 40% 21%;
 
-    --primary: 210 100% 50%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 152 100% 42%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 174 40% 21%;
+    --secondary-foreground: 152 100% 42%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 152 30% 96%;
+    --muted-foreground: 174 15% 45%;
 
-    --accent: 210 40% 96%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 152 70% 90%;
+    --accent-foreground: 174 40% 21%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 222 84% 5%;
+    --border: 152 30% 90%;
+    --input: 152 30% 90%;
+    --ring: 152 100% 42%;
 
     --radius: 0.75rem;
   }
@@ -80,15 +79,15 @@
   }
   
   .glass-panel {
-    @apply bg-white/70 backdrop-blur-sm border border-white/20 rounded-lg shadow-sm;
+    @apply bg-white/70 backdrop-blur-sm border border-bio-green/20 rounded-lg shadow-sm;
   }
   
   .dna-circle {
-    @apply absolute rounded-full bg-bio-blue/10 backdrop-blur-md transition-transform duration-300;
+    @apply absolute rounded-full bg-bio-green/10 backdrop-blur-md transition-transform duration-300;
   }
   
   .link-underline {
-    @apply relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-bio-blue after:transition-all after:duration-300 hover:after:w-full;
+    @apply relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-bio-green after:transition-all after:duration-300 hover:after:w-full;
   }
 }
 

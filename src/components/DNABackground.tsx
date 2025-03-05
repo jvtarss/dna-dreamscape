@@ -15,6 +15,7 @@ interface DNANucleotide {
 const DNABackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [mouseActive, setMouseActive] = useState(false);
   const nucleotidesRef = useRef<DNANucleotide[]>([]);
   const activeRef = useRef(true);
   const frameIdRef = useRef<number>(0);
@@ -23,7 +24,7 @@ const DNABackground: React.FC = () => {
   useEffect(() => {
     const createNucleotides = () => {
       const nucleotides: DNANucleotide[] = [];
-      const colors = ['#4A90E2', '#50E3C2', '#B6E3FF', '#194185'];
+      const colors = ['#00D873', '#1F4843', '#80EBAA', '#347A70'];
       
       for (let i = 0; i < 60; i++) {
         nucleotides.push({
@@ -43,10 +44,19 @@ const DNABackground: React.FC = () => {
     
     createNucleotides();
     
-    window.addEventListener('resize', createNucleotides);
+    const handleResize = () => {
+      createNucleotides();
+      const canvas = canvasRef.current;
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
     
     return () => {
-      window.removeEventListener('resize', createNucleotides);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
   
@@ -54,12 +64,26 @@ const DNABackground: React.FC = () => {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
+      setMouseActive(true);
+      
+      // Reset mouse active after some time of inactivity
+      clearTimeout(mouseActiveTimeout);
+      mouseActiveTimeout = setTimeout(() => setMouseActive(false), 200);
     };
     
+    const handleMouseLeave = () => {
+      setMouseActive(false);
+    };
+    
+    let mouseActiveTimeout: number;
+    
     window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
     
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+      clearTimeout(mouseActiveTimeout);
     };
   }, []);
   
@@ -74,23 +98,14 @@ const DNABackground: React.FC = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     
-    const handleResize = () => {
-      if (canvas) {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    
     const connectNucleotides = (ctx: CanvasRenderingContext2D, a: DNANucleotide, b: DNANucleotide) => {
       const dx = a.x - b.x;
       const dy = a.y - b.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
       
-      if (distance < 100) {
+      if (distance < 120) {
         ctx.beginPath();
-        ctx.strokeStyle = `rgba(74, 144, 226, ${(1 - distance / 100) * 0.15})`;
+        ctx.strokeStyle = `rgba(0, 216, 115, ${(1 - distance / 120) * 0.2})`;
         ctx.lineWidth = 1;
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
@@ -104,8 +119,8 @@ const DNABackground: React.FC = () => {
       
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      const mouseInfluenceRadius = 200;
-      const mouseForce = 0.5;
+      const mouseInfluenceRadius = 180;
+      const mouseForce = mouseActive ? 1.0 : 0;
       
       // Update and draw nucleotides
       for (let i = 0; i < nucleotidesRef.current.length; i++) {
@@ -116,10 +131,10 @@ const DNABackground: React.FC = () => {
         const dy = mousePosition.y - nucleotide.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance < mouseInfluenceRadius) {
+        if (distance < mouseInfluenceRadius && mouseActive) {
           const force = (mouseInfluenceRadius - distance) / mouseInfluenceRadius;
-          nucleotide.vx += (dx / distance) * force * mouseForce;
-          nucleotide.vy += (dy / distance) * force * mouseForce;
+          nucleotide.vx += (dx / distance) * force * mouseForce * 0.2;
+          nucleotide.vy += (dy / distance) * force * mouseForce * 0.2;
         }
         
         // Update position
@@ -127,18 +142,19 @@ const DNABackground: React.FC = () => {
         nucleotide.y += nucleotide.vy;
         
         // Dampen velocity
-        nucleotide.vx *= 0.98;
-        nucleotide.vy *= 0.98;
+        nucleotide.vx *= 0.97;
+        nucleotide.vy *= 0.97;
         
-        // Boundary check
-        if (nucleotide.x < 0 || nucleotide.x > canvas.width) {
+        // Boundary check with buffer zone to prevent getting stuck at edges
+        const buffer = 20;
+        if (nucleotide.x < buffer || nucleotide.x > canvas.width - buffer) {
           nucleotide.vx *= -1;
-          nucleotide.x = Math.max(0, Math.min(canvas.width, nucleotide.x));
+          nucleotide.x = Math.max(buffer, Math.min(canvas.width - buffer, nucleotide.x));
         }
         
-        if (nucleotide.y < 0 || nucleotide.y > canvas.height) {
+        if (nucleotide.y < buffer || nucleotide.y > canvas.height - buffer) {
           nucleotide.vy *= -1;
-          nucleotide.y = Math.max(0, Math.min(canvas.height, nucleotide.y));
+          nucleotide.y = Math.max(buffer, Math.min(canvas.height - buffer, nucleotide.y));
         }
         
         // Connect with other nucleotides
@@ -148,7 +164,7 @@ const DNABackground: React.FC = () => {
         
         // Draw nucleotide
         ctx.beginPath();
-        ctx.fillStyle = nucleotide.color.replace(')', `, ${nucleotide.opacity})`);
+        ctx.fillStyle = nucleotide.color.replace(')', `, ${nucleotide.opacity})`).replace('rgb', 'rgba');
         ctx.arc(nucleotide.x, nucleotide.y, nucleotide.size, 0, Math.PI * 2);
         ctx.fill();
       }
@@ -160,10 +176,9 @@ const DNABackground: React.FC = () => {
     
     return () => {
       activeRef.current = false;
-      window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(frameIdRef.current);
     };
-  }, [mousePosition]);
+  }, [mousePosition, mouseActive]);
   
   return <canvas ref={canvasRef} id="dna-background" className="fixed inset-0 -z-10" />;
 };

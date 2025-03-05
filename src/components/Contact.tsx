@@ -2,8 +2,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, Twitter } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Contact: React.FC = () => {
+  const { t } = useLanguage();
+  
   const socialLinks = [
     { name: 'GitHub', icon: <Github size={20} />, url: 'https://github.com' },
     { name: 'LinkedIn', icon: <Linkedin size={20} />, url: 'https://linkedin.com' },
@@ -19,10 +22,9 @@ const Contact: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="heading-lg text-center">Get In Touch</h2>
+          <h2 className="heading-lg text-center">{t('getInTouch')}</h2>
           <p className="subheading text-center mx-auto">
-            Interested in collaborating on bioinformatics projects or have questions about my work? 
-            Feel free to reach out through any of these channels.
+            {t('contactText')}
           </p>
           
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-8">
@@ -37,7 +39,7 @@ const Contact: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <span className="text-bio-blue">{link.icon}</span>
+                <span className="text-bio-green">{link.icon}</span>
                 <span className="font-medium">{link.name}</span>
               </motion.a>
             ))}
